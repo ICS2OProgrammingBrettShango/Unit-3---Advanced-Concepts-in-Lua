@@ -92,26 +92,12 @@ local alreadyClickedAnswer = false
 
 local function CheckPoints()
 
-    if (numberCorrect == 2) then 
+    if (numberCorrect == 3) then 
 
         -- display youWinScreen
-        composer.gotoScene("youWin")
+        composer.gotoScene("you_win")
     end
 end 
-
-
-
-local function ShowYouWinScreen()
-    -- Dislays the game over image and sound 
-    youWin.isVisible = true
-    WinnerSoundChannel = audio.play(Winner)
-end
-
-local function ShowYouLose()
-    -- Dislays the game over image and sound 
-    youLose.isVisible = true
-    LoserSoundChannel = audio.play(Loser)
-end
 
 
 
@@ -155,14 +141,14 @@ local function DisplayAnswers( )
 end
 
 -- Function that transitions to Lose Screen
-local function YouLoseTransition( )        
+local function LoseTransition( )        
     composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
 end 
 
 
 -- Function that transitions to Lose Screen
-local function YouWinScreenTransition( )        
-    composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
+local function WinTransition( )        
+    composer.gotoScene( "you_Win", {effect = "zoomInOutFade", time = 1000})
 end 
 
 -- The function that displays the equation and determines the answer and the wrong answers
@@ -194,7 +180,7 @@ local function RestartScene()
 
     -- if they have 0 lives, go to the You Lose screen
     if (lives == 0) then
-    composer.gotoScene("You_lose")
+    composer.gotoScene("you_lose")
     else 
 
         DisplayAddEquation()
@@ -218,7 +204,8 @@ local function TouchListenerAnswer(touch)
             incorrect.isVisible = false
             -- increase the number correct by 1
             numberCorrect = numberCorrect + 1
-            
+            -- call checkpoints
+            CheckPoints()
             -- call RestartScene after 1 second
             timer.performWithDelay( 1000, RestartScene )
         end        
