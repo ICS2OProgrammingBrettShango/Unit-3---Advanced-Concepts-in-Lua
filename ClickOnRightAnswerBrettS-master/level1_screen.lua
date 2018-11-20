@@ -37,6 +37,7 @@ local scene = composer.newScene( sceneName )
 -- The local variables for this scene
 local bkg
 
+
 -- determine the range for the numbers to add
 local MIN_NUM = 1
 local MAX_NUM = 10
@@ -70,6 +71,9 @@ local congratulationText
 -- Displays text that says correct.
 local correct 
 
+-- Displays text that says correct.
+local incorrect
+
 -- Displays the level text of time text
 local level1Text 
 
@@ -83,14 +87,40 @@ local alreadyClickedAnswer = false
 
 
 -----------------------------------------------------------------------------------------
--- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
+-- LOCAL FUNCTIONS
+
+local function CheckPoints()
+
+    if (numberCorrect == 2) then 
+
+        -- display youWinScreen
+        composer.gotoScene("youWin")
+    end
+end 
+
+
+
+local function ShowYouWinScreen()
+    -- Dislays the game over image and sound 
+    youWin.isVisible = true
+    WinnerSoundChannel = audio.play(Winner)
+end
+
+local function ShowYouLose()
+    -- Dislays the game over image and sound 
+    youLose.isVisible = true
+    LoserSoundChannel = audio.play(Loser)
+end
+
+
 
 local function DetermineAnswers()
     -- calculate the correct answer as well as the wrong answers
     answer = firstNumber + secondNumber
     wrongAnswer1 = answer + math.random(1,4)
     wrongAnswer2 = answer + math.random(5,8)
+   
 end
 
 -- Function that changes the answers for a new question and places them randomly in one of the positions
@@ -100,30 +130,38 @@ local function DisplayAnswers( )
     answerTextObject.text = tostring( answer )
     wrongAnswer1TextObject.text = tostring( wrongAnswer1 )
     wrongAnswer2TextObject.text = tostring( wrongAnswer2 )
-
+   
     if (answerPosition == 1) then                
         
         answerTextObject.x = display.contentWidth*.3        
         wrongAnswer1TextObject.x = display.contentWidth*.2
         wrongAnswer2TextObject.x = display.contentWidth*.1 
+       
 
     elseif (answerPosition == 2) then
        
         answerTextObject.x = display.contentWidth*.2        
         wrongAnswer1TextObject.x = display.contentWidth*.1
         wrongAnswer2TextObject.x = display.contentWidth*.3 
-
+       
     else
        
         answerTextObject.x = display.contentWidth*.1        
         wrongAnswer1TextObject.x = display.contentWidth*.2
         wrongAnswer2TextObject.x = display.contentWidth*.3
+        
     end
 
 end
 
 -- Function that transitions to Lose Screen
-local function LoseScreenTransition( )        
+local function YouLoseTransition( )        
+    composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
+end 
+
+
+-- Function that transitions to Lose Screen
+local function YouWinScreenTransition( )        
     composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
 end 
 
@@ -150,13 +188,13 @@ local function RestartScene()
 
     alreadyClickedAnswer = false
     correct.isVisible = false
-
+    
     livesText.text = "Number of lives = " .. tostring(lives)
     numberCorrectText.text = "Number correct = " .. tostring(numberCorrect)
 
     -- if they have 0 lives, go to the You Lose screen
     if (lives == 0) then
-        composer.gotoScene("you_lose")
+    composer.gotoScene("You_lose")
     else 
 
         DisplayAddEquation()
@@ -177,8 +215,10 @@ local function TouchListenerAnswer(touch)
         -- if the user gets the answer right, display Correct and call RestartSceneRight
         if (answer == tonumber(userAnswer)) then     
             correct.isVisible = true
+            incorrect.isVisible = false
             -- increase the number correct by 1
             numberCorrect = numberCorrect + 1
+            
             -- call RestartScene after 1 second
             timer.performWithDelay( 1000, RestartScene )
         end        
@@ -186,20 +226,25 @@ local function TouchListenerAnswer(touch)
     end
 end
 
+
+
+
+
 local function TouchListenerWrongAnswer1(touch)
     -- get the user answer from the text object that was clicked on
     local userAnswer = wrongAnswer1TextObject.text
 
     if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
-
-        alreadyClickedAnswer = true
+         alreadyClickedAnswer = true
 
 
         if (answer ~= tonumber(userAnswer)) then
+            incorrect.isVisible = true
             -- decrease a life
             lives = lives - 1
             -- call RestartScene after 1 second
-            timer.performWithDelay( 1000, RestartScene )            
+            timer.performWithDelay( 1000, RestartScene )    
+
         end        
 
     end
@@ -217,6 +262,7 @@ local function TouchListenerWrongAnswer2(touch)
 
             if (answer ~= tonumber(userAnswer)) then
                 -- decrease a life
+                incorrect.isVisible = true
                 lives = lives - 1
                 -- call RestartScene after 1 second
                 timer.performWithDelay( 1000, RestartScene )            
@@ -224,6 +270,11 @@ local function TouchListenerWrongAnswer2(touch)
     
         end
 end
+
+
+
+
+
     
 -- Function that adds the touch listeners to each of the answer objects
 local function AddTextObjectListeners()
@@ -292,6 +343,31 @@ function scene:create( event )
     correct = display.newText("Correct", display.contentWidth/2, display.contentHeight*1/3, nil, 50 )
     correct:setTextColor(100/255, 47/255, 210/255)
     correct.isVisible = false
+
+    YouWinScreen = display.newImageRect("Images/YouWinScreen.png", display.contentWidth, display.contentHeight)
+    YouWinScreen.anchorX = 0
+    YouWinScreen.anchorY = 0
+    YouWinScreen.isVisible = false
+    WinnerSoundChannel = audio.play(Winner)
+
+
+    YouLose = display.newImageRect("Images/YouLose.png", display.contentWidth, display.contentHeight)
+    YouLose.anchorX = 0
+    YouLose.anchorY = 0
+    YouLose.isVisible = false
+    LoserSoundChannel = audio.play(Loser)
+
+
+    
+
+
+
+
+
+    -- create the text object that will say incorrect, set the colour and then hide it
+    incorrect = display.newText("Incorrect", display.contentWidth/2, display.contentHeight*1/3, nil, 50 )
+    incorrect:setTextColor(100/255, 47/255, 210/255)
+    incorrect.isVisible = false
 
     -- create the text object that will say Out of Time, set the colour and then hide it
     outOfTimeText = display.newText("Out of Time!", display.contentWidth*2/5, display.contentHeight*1/3, nil, 50)
@@ -404,3 +480,8 @@ scene:addEventListener( "destroy", scene )
 -----------------------------------------------------------------------------------------
 
 return scene
+
+
+---------------------------------------------------------
+-- FUNCTION CALLS
+----------------------------------------------------------
