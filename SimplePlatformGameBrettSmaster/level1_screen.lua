@@ -54,10 +54,12 @@ local character
 
 local heart1
 local heart2
-local numLives = 2
+local heart3
+local numLives = 3
 
 local rArrow 
 local uArrow
+local lArrow
 
 local motionx = 0
 local SPEED = 5
@@ -65,11 +67,13 @@ local LINEAR_VELOCITY = -100
 local GRAVITY = 7
 
 local leftW 
+local leftR
 local topW
 local floor
 
 local ball1
 local ball2
+local ball3
 local theBall
 
 local questionsAnswered = 0
@@ -82,6 +86,13 @@ local questionsAnswered = 0
 local function right (touch)
     motionx = SPEED
     character.xScale = 1
+end
+
+
+-- When right arrow is touched, move character right
+local function left (touch)
+    motionx = SPEED
+    character.yScale = 1
 end
 
 -- When up arrow is touched, add vertical so it can jump
@@ -107,6 +118,7 @@ end
 local function AddArrowEventListeners()
     rArrow:addEventListener("touch", right)
     uArrow:addEventListener("touch", up)
+
 end
 
 local function RemoveArrowEventListeners()
@@ -152,11 +164,14 @@ end
 local function MakeSoccerBallsVisible()
     ball1.isVisible = true
     ball2.isVisible = true
+    ball3.isVisible = true
+end
 end
 
 local function MakeHeartsVisible()
     heart1.isVisible = true
     heart2.isVisible = true
+    heart3.isVisible = true
 end
 
 local function YouLoseTransition()
@@ -196,12 +211,14 @@ local function onCollision( self, event )
                 -- update hearts
                 heart1.isVisible = true
                 heart2.isVisible = false
+                heart3.isVisible = false
                 timer.performWithDelay(200, ReplaceCharacter) 
 
             elseif (numLives == 0) then
                 -- update hearts
                 heart1.isVisible = false
                 heart2.isVisible = false
+                heart3.isVisible = false
                 timer.performWithDelay(200, YouLoseTransition)
             end
         end
@@ -228,6 +245,9 @@ local function onCollision( self, event )
         if (event.target.myName == "door") then
             --check to see if the user has answered 5 questions
             if (questionsAnswered == 3) then
+                -- display youWinScreen
+                composer.gotoScene("you_win")
+                
                 -- after getting 3 questions right, go to the you win screen
             end
         end        
@@ -235,7 +255,7 @@ local function onCollision( self, event )
     end
 end
 
-
+--
 local function AddCollisionListeners()
     -- if character collides with ball, onCollision will be called
     spikes1.collision = onCollision
@@ -250,6 +270,8 @@ local function AddCollisionListeners()
     ball1:addEventListener( "collision" )
     ball2.collision = onCollision
     ball2:addEventListener( "collision" )
+    ball3.collision = onCollision
+    ball3:addEventListener( "collision" )
 
     door.collision = onCollision
     door:addEventListener( "collision" )
@@ -446,6 +468,15 @@ function scene:create( event )
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( heart2 )
+
+
+    heart3 = display.newImageRect("Images/heart.png", 80, 80)
+    heart3.x = 130
+    heart3.y = 50
+    heart3.isVisible = true
+
+    -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( heart3 )
 
     --Insert the right arrow
     rArrow = display.newImageRect("Images/RightArrowUnpressed.png", 100, 50)
