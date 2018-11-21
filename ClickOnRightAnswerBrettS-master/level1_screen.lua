@@ -142,7 +142,7 @@ end
 
 -- Function that transitions to Lose Screen
 local function LoseTransition( )        
-    composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
+    composer.gotoScene( "you_Lose", {effect = "zoomInOutFade", time = 1000})
 end 
 
 
@@ -180,7 +180,7 @@ local function RestartScene()
 
     -- if they have 0 lives, go to the You Lose screen
     if (lives == 0) then
-    composer.gotoScene("you_lose")
+    composer.gotoScene("you_Lose")
     else 
 
         DisplayAddEquation()
