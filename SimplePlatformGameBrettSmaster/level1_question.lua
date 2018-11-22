@@ -41,10 +41,12 @@ local secondNumber
 local answer
 local wrongAnswer1
 local wrongAnswer2
+local wrongAnswer3
 
 local answerText 
 local wrongAnswerText1
 local wrongAnswerText2
+local wrongAnswerText3
 
 local answerPosition = 1
 local bkg
@@ -54,6 +56,9 @@ local X1 = display.contentWidth*2/7
 local X2 = display.contentWidth*4/7
 local Y1 = display.contentHeight*1/2
 local Y2 = display.contentHeight*5.5/7
+local x2 = display.contentHeight*1/2
+local Y1 = display.contentHeight*5.5/7
+
 
 local userAnswer
 local textTouched = false
@@ -105,18 +110,33 @@ local function TouchListenerWrongAnswer2(touch)
 end
 
 
+
+--checking to see if the user pressed the right answer and bring them back to level 1
+local function TouchListenerWrongAnswer3(touch)
+    userAnswer = wrongText3.text
+    
+    if (touch.phase == "ended") then
+
+        BackToLevel1( )
+        
+    end 
+end
+
+
 --adding the event listeners 
 local function AddTextListeners ( )
     answerText:addEventListener( "touch", TouchListenerAnswer )
-    wrongText1:addEventListener( "touch", TouchListenerWrongAnswer)
+    wrongText1:addEventListener( "touch", TouchListenerWrongAnswer1)
     wrongText2:addEventListener( "touch", TouchListenerWrongAnswer2)
-end
+    wrongText3:addEventListener( "touch", TouchListenerWrongAnswer3)
+end 
 
 --removing the event listeners
 local function RemoveTextListeners()
     answerText:removeEventListener( "touch", TouchListenerAnswer )
-    wrongText1:removeEventListener( "touch", TouchListenerWrongAnswer)
+    wrongText1:removeEventListener( "touch", TouchListenerWrongAnswer1)
     wrongText2:removeEventListener( "touch", TouchListenerWrongAnswer2)
+    wrongText3:addEventListener( "touch", TouchListenerWrongAnswer3)
 end
 
 local function DisplayQuestion()
@@ -128,9 +148,9 @@ local function DisplayQuestion()
     answer = firstNumber + secondNumber
 
     -- calculate wrong answers
-    wrongAnswer1 = answer + math.random(1, 3)
-    wrongAnswer2 = answer + math.random(4, 6)
-
+    wrongAnswer1 = answer + math.random(1, 4)
+    wrongAnswer2 = answer + math.random(5, 7)
+    wrongAnswer3 = answer + math.random(8, 10)
 
     --creating the question depending on the selcetion number
     questionText.text = firstNumber .. " + " .. secondNumber .. " ="
@@ -141,6 +161,7 @@ local function DisplayQuestion()
     --creating wrong answers
     wrongText1.text = wrongAnswer1
     wrongText2.text = wrongAnswer2
+    wrongText3.text = wrongAnswer3
 end
 
 local function PositionAnswers()
@@ -159,7 +180,9 @@ local function PositionAnswers()
         wrongText2.x = X1
         wrongText2.y = Y2
 
-        
+        wrongText3.x = X2
+        wrongText3.y = Y2
+
     elseif (answerPosition == 2) then
 
         answerText.x = X1
@@ -170,8 +193,11 @@ local function PositionAnswers()
             
         wrongText2.x = X2
         wrongText2.y = Y1
-
-
+                         
+        wrongText3.x = X2
+        wrongText3.y = Y2
+                 
+ 
     elseif (answerPosition == 3) then
 
         answerText.x = X2
@@ -182,6 +208,28 @@ local function PositionAnswers()
             
         wrongText2.x = X1
         wrongText2.y = Y1
+
+        wrongText3.x = X2
+        wrongText3.y = Y2
+            
+            
+
+
+
+    elseif (answerPosition == 4) then
+
+        answerText.x = X2
+        answerText.y = Y1
+            
+        wrongText1.x = X1
+        wrongText1.y = Y2
+            
+        wrongText2.x = X1
+        wrongText2.y = Y1
+
+        wrongText3.x = X2
+        wrongText3.y = Y2
+            
             
     end
 end
@@ -218,6 +266,8 @@ function scene:create( event )
     wrongText1.anchorX = 0
     wrongText2 = display.newText("", X1, Y1, Arial, 75)
     wrongText2.anchorX = 0
+    wrongText3 = display.newText("", X2, Y1, Arial, 75)
+    wrongText3.anchorX = 0
 
     -----------------------------------------------------------------------------------------
 
@@ -228,8 +278,7 @@ function scene:create( event )
     sceneGroup:insert(answerText)
     sceneGroup:insert(wrongText1)
     sceneGroup:insert(wrongText2)
-
-
+    sceneGroup:insert(wrongText3)
 end --function scene:create( event )
 
 -----------------------------------------------------------------------------------------
@@ -254,7 +303,7 @@ function scene:show( event )
         -- Example: start timers, begin animation, play audio, etc.
         DisplayQuestion()
         PositionAnswers()
-        AddTextListeners()
+        
     end
 
 end --function scene:show( event )
