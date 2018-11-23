@@ -52,12 +52,10 @@ local answerPosition = 1
 local bkg
 local cover
 
-local X1 = display.contentWidth*2/7
-local X2 = display.contentWidth*4/7
-local Y1 = display.contentHeight*1/2
-local Y2 = display.contentHeight*5.5/7
-local x2 = display.contentHeight*1/2
-local Y1 = display.contentHeight*5.5/7
+local X1 = display.contentWidth*3.9/7
+local X2 = display.contentWidth*2.3/7
+local Y1 = display.contentHeight*3/7
+local Y2 = display.contentHeight*5.6/7
 
 
 local userAnswer
@@ -118,17 +116,18 @@ local function TouchListenerWrongAnswer3(touch)
     if (touch.phase == "ended") then
 
         BackToLevel1( )
-        
+        AddTextListeners()
     end 
 end
 
 
 --adding the event listeners 
-local function AddTextListeners ( )
+local function AddTextListeners()
     answerText:addEventListener( "touch", TouchListenerAnswer )
     wrongText1:addEventListener( "touch", TouchListenerWrongAnswer1)
     wrongText2:addEventListener( "touch", TouchListenerWrongAnswer2)
     wrongText3:addEventListener( "touch", TouchListenerWrongAnswer3)
+
 end 
 
 --removing the event listeners
@@ -136,7 +135,7 @@ local function RemoveTextListeners()
     answerText:removeEventListener( "touch", TouchListenerAnswer )
     wrongText1:removeEventListener( "touch", TouchListenerWrongAnswer1)
     wrongText2:removeEventListener( "touch", TouchListenerWrongAnswer2)
-    wrongText3:addEventListener( "touch", TouchListenerWrongAnswer3)
+    wrongText3:addEventListener( "touch",   TouchListenerWrongAnswer3)
 end
 
 local function DisplayQuestion()
@@ -203,33 +202,15 @@ local function PositionAnswers()
         answerText.x = X2
         answerText.y = Y1
             
-        wrongText1.x = X1
-        wrongText1.y = Y2
+        wrongText1.x = X4
+        wrongText1.y = Y3
             
-        wrongText2.x = X1
+        wrongText2.x = X4
         wrongText2.y = Y1
 
-        wrongText3.x = X2
+        wrongText3.x = X4
         wrongText3.y = Y2
-            
-            
-
-
-
-    elseif (answerPosition == 4) then
-
-        answerText.x = X2
-        answerText.y = Y1
-            
-        wrongText1.x = X1
-        wrongText1.y = Y2
-            
-        wrongText2.x = X1
-        wrongText2.y = Y1
-
-        wrongText3.x = X2
-        wrongText3.y = Y2
-            
+        
             
     end
 end
@@ -279,16 +260,18 @@ function scene:create( event )
     sceneGroup:insert(wrongText1)
     sceneGroup:insert(wrongText2)
     sceneGroup:insert(wrongText3)
+    
 end --function scene:create( event )
 
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to appear on screen
-function scene:show( event )
+ function scene:show(event)
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
     local phase = event.phase
+   
 
     -----------------------------------------------------------------------------------------
 
@@ -303,10 +286,24 @@ function scene:show( event )
         -- Example: start timers, begin animation, play audio, etc.
         DisplayQuestion()
         PositionAnswers()
-        
-    end
+        AddTextListeners()
+       
 
-end --function scene:show( event )
+        answerText.x = X2
+        answerText.y = Y1
+            
+        wrongText1.x = X1
+        wrongText1.y = Y2
+            
+        wrongText2.x = X1
+        wrongText2.y = Y1
+
+        wrongText3.x = X2
+        wrongText3.y = Y2
+    end      
+end 
+
+--function scene:show( event )
 
 -----------------------------------------------------------------------------------------
 
@@ -324,6 +321,7 @@ function scene:hide( event )
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
         --parent:resumeGame()
+          
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
@@ -346,7 +344,6 @@ function scene:destroy( event )
     -- Called prior to the removal of scene's view ("sceneGroup"). 
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.
-
 end -- function scene:destroy( event )
 
 -----------------------------------------------------------------------------------------
