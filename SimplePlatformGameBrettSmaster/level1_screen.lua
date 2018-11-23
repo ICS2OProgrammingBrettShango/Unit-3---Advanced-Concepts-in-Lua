@@ -94,6 +94,12 @@ local youLoseSoundChannel
 local Grease_Monkey = audio.loadSound("Sounds/Grease_Monkey.mp3")
 local Grease_MonkeySoundChannel
 
+--Spring sound effect
+ local WrongBuzzer = audio.loadSound( "Sounds/WrongBuzzer.mp3" )
+ local WrongBuzzerSoundChannel
+
+
+
 
 -----------------------------------------------------------------------------------------
 -- LOCAL SCENE FUNCTIONS
@@ -195,8 +201,14 @@ end
 
 local function YouLoseTransition()
     composer.gotoScene( "you_lose" )
+
 end
 
+
+local function SpikeOut()
+    -- when user loses a life by hiting a spike
+    audio.play(SpikeOut)
+end
 local function YouWinTransition()
     composer.gotoScene( "you_win" )
 end
@@ -243,6 +255,7 @@ local function onCollision( self, event )
                 heart2.isVisible = true
                 heart3.isVisible = false
                 timer.performWithDelay(200, ReplaceCharacter) 
+               
 
             
             elseif (numLives == 1) then
@@ -251,7 +264,7 @@ local function onCollision( self, event )
                 heart2.isVisible = false
                 heart3.isVisible = false
                 timer.performWithDelay(200, ReplaceCharacter) 
-
+                
 
 
             elseif (numLives == 0) then
@@ -260,7 +273,7 @@ local function onCollision( self, event )
                 heart2.isVisible = false
                 heart3.isVisible = false
                 timer.performWithDelay(200, YouLoseTransition)
-                youLoseSoundChannel = audio.play(youLose) 
+                WrongBuzzerSoundChannel = audio.play(WrongBuzzer) 
             end
         end
 
@@ -268,10 +281,14 @@ local function onCollision( self, event )
             (event.target.myName == "ball2") or
             (event.target.myName == "ball3") or
             (event.target.myName == "ball4") then
+
+
+
             
 
             -- get the ball that the user hit
             theBall = event.target
+
 
             -- stop the character from moving
             motionx = 0
@@ -287,6 +304,7 @@ local function onCollision( self, event )
             print("***questions answered = " .. questionsAnswered)
         end
 
+        
         if (event.target.myName == "door") then
             --check to see if the user has answered 3 questions
             if (questionsAnswered == 4) then
@@ -522,6 +540,7 @@ function scene:create( event )
     heart3.x = 220
     heart3.y = 50
     heart3.isVisible = true
+
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( heart3 )

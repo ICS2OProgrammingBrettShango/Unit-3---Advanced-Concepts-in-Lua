@@ -50,9 +50,9 @@ end
     springSoundChannel = audio.play(springsound)
  end
 
---When the game starts, it waits and calls this function
-local function SplashStart( )
-    timer.performWithDelay(1950, SpringSoundEffect)
+--When the user hits a spike starts, it waits and calls this function
+local function SpikeOut( )
+    timer.performWithDelay(1950, SpikeOut)
 end
 
 

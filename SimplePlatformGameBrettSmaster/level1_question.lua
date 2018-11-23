@@ -114,9 +114,7 @@ local function TouchListenerWrongAnswer3(touch)
     userAnswer = wrongText3.text
     
     if (touch.phase == "ended") then
-
         BackToLevel1( )
-        AddTextListeners()
     end 
 end
 
@@ -124,18 +122,18 @@ end
 --adding the event listeners 
 local function AddTextListeners()
     answerText:addEventListener( "touch", TouchListenerAnswer )
-    wrongText1:addEventListener( "touch", TouchListenerWrongAnswer1)
+    wrongText1:addEventListener( "touch", TouchListenerWrongAnswer)
     wrongText2:addEventListener( "touch", TouchListenerWrongAnswer2)
     wrongText3:addEventListener( "touch", TouchListenerWrongAnswer3)
-
 end 
 
 --removing the event listeners
 local function RemoveTextListeners()
-    answerText:removeEventListener( "touch", TouchListenerAnswer )
-    wrongText1:removeEventListener( "touch", TouchListenerWrongAnswer1)
+
+    answerText:removeEventListener( "touch", TouchListenerAnswer)     
+    wrongText1:removeEventListener( "touch", TouchListenerWrongAnswer)
     wrongText2:removeEventListener( "touch", TouchListenerWrongAnswer2)
-    wrongText3:addEventListener( "touch",   TouchListenerWrongAnswer3)
+    wrongText3:removeEventListener( "touch", TouchListenerWrongAnswer3)
 end
 
 local function DisplayQuestion()
@@ -147,9 +145,9 @@ local function DisplayQuestion()
     answer = firstNumber + secondNumber
 
     -- calculate wrong answers
-    wrongAnswer1 = answer + math.random(1, 4)
-    wrongAnswer2 = answer + math.random(5, 7)
-    wrongAnswer3 = answer + math.random(8, 10)
+    wrongAnswer1 = answer + math.random(1, 3)
+    wrongAnswer2 = answer + math.random(4, 6)
+    wrongAnswer3 = answer + math.random(7, 9)
 
     --creating the question depending on the selcetion number
     questionText.text = firstNumber .. " + " .. secondNumber .. " ="
