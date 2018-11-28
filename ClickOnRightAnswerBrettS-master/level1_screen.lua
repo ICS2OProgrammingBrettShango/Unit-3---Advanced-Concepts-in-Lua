@@ -12,6 +12,12 @@
 -----------------------------------------------------------------------------------------
 
 
+
+
+
+
+local youLoseSoundChannel
+
 -- Use Composer Library
 local composer = require( "composer" )
 
@@ -86,7 +92,14 @@ local alreadyClickedAnswer = false
 -----------------------------------------------------------------------------------------
 
 
------------------------------------------------------------------------------------------
+
+local youWinSound = audio.loadSound("Sounds/youWinSound.wav")
+local youWinSoundChannel
+
+--correct sound
+local monsterSound = audio.loadSound("Sounds/monsterSound.wav")
+local monsterSoundChannel
+
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 
@@ -96,6 +109,9 @@ local function CheckPoints()
 
         -- display youWinScreen
         composer.gotoScene("you_win")
+        youWinSoundChannel = audio.play(youWinSound)
+    
+    
     end
 end 
 
@@ -149,6 +165,8 @@ end
 -- Function that transitions to Lose Screen
 local function WinTransition( )        
     composer.gotoScene( "you_Win", {effect = "zoomInOutFade", time = 1000})
+   
+
 end 
 
 -- The function that displays the equation and determines the answer and the wrong answers
@@ -178,9 +196,11 @@ local function RestartScene()
     livesText.text = "Number of lives = " .. tostring(lives)
     numberCorrectText.text = "Number correct = " .. tostring(numberCorrect)
 
-    -- if they have 0 lives, go to the You Lose screen
+    -- if they have 0 lives, go to the You Lose screen and lay you suck sound
     if (lives == 0) then
     composer.gotoScene("you_Lose")
+    monsterSoundChannel = audio.loadSound(monsterSound)
+
     else 
 
         DisplayAddEquation()
@@ -201,6 +221,10 @@ local function TouchListenerAnswer(touch)
         -- if the user gets the answer right, display Correct and call RestartSceneRight
         if (answer == tonumber(userAnswer)) then     
             correct.isVisible = true
+            
+            -- correct sound plays
+            correctSound = audio.loadSound(correctSound)
+
             incorrect.isVisible = false
             -- increase the number correct by 1
             numberCorrect = numberCorrect + 1
@@ -342,7 +366,7 @@ function scene:create( event )
     YouLose.anchorX = 0
     YouLose.anchorY = 0
     YouLose.isVisible = false
-    LoserSoundChannel = audio.play(Loser)
+    monsterSoundChannel = audio.play(monsterSound)
 
 
     
