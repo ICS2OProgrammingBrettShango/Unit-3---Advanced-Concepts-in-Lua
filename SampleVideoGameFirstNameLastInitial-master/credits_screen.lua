@@ -70,20 +70,21 @@ function scene:create( event )
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
 
+
     -- Creating Back Button
     backButton = widget.newButton( 
     {
         -- Setting Position
         x = display.contentWidth*1/8,
-        y = display.contentHeight*15/16,
+        y = display.contentHeight*15.4/16,
 
         -- Setting Dimensions
-        -- width = 1000,
-        -- height = 106,
+         width = 200,
+         height = 100,
 
         -- Setting Visual Properties
-        defaultFile = "Images/Back Button Unpressed.png",
-        overFile = "Images/Back Button Pressed.png",
+        defaultFile = "Images/BackButtonUnpressed.png",
+        overFile = "Images/BackButtonPressed.png",
 
         -- Setting Functional Properties
         onRelease = BackTransition
@@ -91,10 +92,9 @@ function scene:create( event )
     } )
 
     -----------------------------------------------------------------------------------------
-
     -- Associating Buttons with this scene
     sceneGroup:insert( backButton )
-    
+  
 end --function scene:create( event )
 
 -----------------------------------------------------------------------------------------

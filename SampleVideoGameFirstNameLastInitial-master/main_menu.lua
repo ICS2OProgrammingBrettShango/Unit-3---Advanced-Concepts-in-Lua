@@ -47,16 +47,16 @@ local function CreditsTransition( )
 end 
 
 -----------------------------------------------------------------------------------------
-
+-- Creating Transition Function to Credits Page
+local function InstructionsTransition( )       
+    composer.gotoScene( "instructions_screen", {effect = "flipFadeOutIn", time = 500})
+end 
+--------------------------------------------------------------------------------------------
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
     composer.gotoScene( "level1_screen", {effect = "zoomInOutFade", time = 1000})
 end   
 
--- Creating Transition to Level1 Screen
-local function InstructionsScreenTransition( )
-    composer.gotoScene( "instructions_screen", {effect = "zoomInOutFade", time = 1000})
-end   
 
 
 
@@ -161,7 +161,7 @@ function scene:create( event )
     -- Associating button widgets with this scene
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
-    
+    sceneGroup:insert(instructionsButton)
     
     -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
 
